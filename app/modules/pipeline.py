@@ -13,6 +13,8 @@ def evaluate(rows, stage):
         case['prep'], payload = prepare(rows)
         if stage >= 3:
             case['measure'] = compute(payload)
+            # 结构化配对同时放到 case 顶层，便于签发物化与不同读取习惯
+            case['pairs'] = case['measure'].get('pairs', [])
         if stage >= 4:
             case.update(policy(case['measure']))
     except DomainIssue as error:

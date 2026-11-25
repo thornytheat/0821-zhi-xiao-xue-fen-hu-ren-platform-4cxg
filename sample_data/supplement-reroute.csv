@@ -1,0 +1,10 @@
+record,case,kind,external_course,local_course,credits,priority,note
+S01,0001,external,1,0,5,0,补录外校课
+S02,0001,external,3,0,5,0,换组备选课
+S03,0001,required,0,2,5,0,原配对校内课
+S04,0001,required,0,3,5,0,换组校内课
+S05,0001,equivalence,1,2,5,1,原方案撞已签发
+S06,0001,equivalence,1,3,5,1,调整记录
+S07,0001,equivalence,3,2,5,1,调整记录
+S08,0001,equivalence,3,3,5,2,换组配对
+S09,0001,authorization,0,0,5,0,本批最低学分

@@ -9,6 +9,7 @@ from app.config import MAX_FILE, ROOT
 from app.http_errors import response
 from app.review.store import Store
 from app.spec import PROJECT
+from app.supplement.web import web as supplement_api
 
 
 def create_app(database=None):
@@ -18,6 +19,7 @@ def create_app(database=None):
     app.register_error_handler(DomainIssue,response)
     app.register_error_handler(RequestEntityTooLarge,lambda _: response(DomainIssue('FILE_TOO_LARGE')))
     app.register_blueprint(api)
+    app.register_blueprint(supplement_api)
 
     @app.get('/')
     def home():

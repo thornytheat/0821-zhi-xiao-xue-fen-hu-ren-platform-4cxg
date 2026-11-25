@@ -40,6 +40,38 @@
     <div class="review-actions"><button name="decision" value="HELD">暂缓</button><button class="action" name="decision" value="APPROVED">签发</button></div>
     <a id="evidence">下载复核证据</a>
   </form>
+  <section class="supplement-desk" aria-labelledby="supplement-title">
+    <h2 id="supplement-title">同一申请 · 补录签发</h2>
+    <p class="sup-hint">已签发配对冻结保留；同一外校课/校内课跨批次只抵扣一次。撞课时自动换组配对，达到本批最低学分仍可签发。</p>
+    <form id="supplement-form" class="supplement-form">
+      <label>申请编号（业务组）<input id="sup-app" name="application_id" value="0001" required></label>
+      <label>回执编号（重试不重复计学分）<input id="sup-receipt" name="receipt" placeholder="例如 receipt-001"></label>
+      <label>补录样例
+        <select id="sup-profile" name="sample">
+          <option value="supplement">撞课换组样例（0001）</option>
+          <option value="">— 上传 CSV —</option>
+        </select>
+      </label>
+      <label for="sup-file" class="file">上传补录 CSV</label>
+      <input id="sup-file" type="file" accept=".csv,text/csv">
+      <button type="submit" class="action">提交补录签发</button>
+      <button type="button" id="sup-refresh">查询该申请结论</button>
+    </form>
+    <div id="sup-notice" role="status" aria-live="polite"></div>
+    <div class="supplement-grid">
+      <div>
+        <h3>本批结论</h3>
+        <div id="sup-result" class="sup-result">尚未提交补录批次。</div>
+      </div>
+      <div>
+        <h3>该申请的签发结论与原因</h3>
+        <ul id="sup-history" class="sup-history"></ul>
+        <h3>已锁定抵扣课程</h3>
+        <div id="sup-claims" class="sup-claims">—</div>
+      </div>
+    </div>
+    <script type="module" src="{{ url_for('static', filename='supplement.js') }}"></script>
+  </section>
 </aside>
 {% endmacro %}
 {% macro status() %}

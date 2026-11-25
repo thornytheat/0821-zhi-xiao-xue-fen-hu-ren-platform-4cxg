@@ -39,4 +39,34 @@ def review(store, run_id, values):
         raise DomainIssue('RUN_FINALIZED')
     if status == 'APPROVED' and not current['report']['balance']['releasable']:
         raise DomainIssue('UNRESOLVED_ISSUES')
-    return store.revise(run_id,revision,status,note.strip(),now())
+    claims = _approval_claims(current) if status == 'APPROVED' else ()
+    return store.revise(run_id,revision,status,note.strip(),now(),claims=claims)
+
+
+def _approval_claims(run):
+    """把签发 run 中各业务组的获胜配对物化为跨批次占用。
+
+    业务组（case）即同一申请的补录作用域；已签发配对此后冻结。
+    """
+    claims = []
+    for case in run['report'].get('cases', []):
+        measure = case.get('measure') or {}
+        pairs = case.get('pairs') or measure.get('pairs', [])
+        for pair in pairs:
+            claims.append({
+                'application_id': str(case['case']),
+                'supplement_id': run['id'],
+                'case_id': str(case['case']),
+                'external_course': pair['external_course'],
+                'local_course': pair['local_course'],
+                'credits': pair.get('credits', 0),
+                'priority': pair.get('priority', 0),
+            })
+    return claims
+
+
+# 兼容从 app.review.service 直接导入补录签发用例的测试/调用方
+from app.supplement.service import (  # noqa: E402,F401
+    application_summary, evaluate_supplement, get_supplement, issue_supplement,
+    list_supplements, plan_supplement, recalculate,
+)
